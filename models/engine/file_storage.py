@@ -10,7 +10,7 @@ class FileStorage:
     __file_path = 'file.json'
     __objects = {}
 
-    '''def __init_(self):
+    def __init_(self):
         """   """
         self.model_classes = {
                 'BaseModel': import module('models.base_model').BaseModel,
@@ -20,7 +20,7 @@ class FileStorage:
                 'City': import module("models.city")City,
                 'Amenity': import module('models.amenity')Amenity,
                 'Review': import module("models.review")Review
-                }'''
+                }
     def all(self, cls=None):
         """Returns a dictionary of models currently in storage"""
         if cls = None:
