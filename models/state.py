@@ -1,24 +1,37 @@
 #!/usr/bin/python3
-""" City Module for HBNB project """
-import os
-from SQLAlchemy import Column, String
-from SQLAlchemy.orm import relationship
+"""This is the state class"""
 from models.base_model import BaseModel, Base
-from mdels.city import City
-import models
+from sqlalchemy import Column, String
+from sqlalchemy.orm import relationship
+from os import environ
+
 
 class State(BaseModel, Base):
-    """ The city class, contains state ID and name """
+    """This is the class for State
+    Attributes:
+        __tablename__: name of MySQL table
+        name: input name
+    """
     __tablename__ = 'states'
-    name = Column(Strin(128), nullable=False)
-    cities = relationship("City", backref="state", cascade="delete")
+    name = Column(String(128), nullable=False)
 
-    if getenv("HBNB_TYPE_STORAGE") != "db":
+    if environ['HBNB_TYPE_STORAGE'] == 'db':
+        cities = relationship('City', cascade='all, delete', backref='state')
+    else:
         @property
         def cities(self):
-            """    """
-            city_list = []
-            for city in list(models.storage.all(City).values()):
+            """Getter method for cities
+            Return: list of cities with state_id equal to self.id
+            """
+            from models import storage
+            from models.city import City
+            # return list of City objs in __objects
+            cities_dict = storage.all(City)
+            cities_list = []
+
+            # copy values from dict to list
+            for city in cities_dict.values():
                 if city.state_id == self.id:
-                    city_list.append(city)
-            return city_list
+                    cities_list.append(city)
+
+            return cities_list
