@@ -7,6 +7,7 @@ import pep8 as pycodestyle
 import time
 import unittest
 from unittest import mock
+import pytz
 BaseModel = models.base_model.BaseModel
 module_doc = models.base_model.__doc__
 
@@ -82,15 +83,17 @@ class TestBaseModel(unittest.TestCase):
         """Test that two BaseModel instances have different datetime objects
         and that upon creation have identical updated_at and created_at
         value."""
-        tic = datetime.now()
+        utc = pytz.UTC
+        tic = datetime.now(utc)
+        time.sleep(0.01)
         inst1 = BaseModel()
-        toc = datetime.now()
+        toc = datetime.now(utc)
         print(f"tic: {tic}, inst1.created_at: {inst1.created_at}, toc:{toc}")
         self.assertTrue(tic <= inst1.created_at <= toc)
         time.sleep(0.01)
-        tic = datetime.now()
+        tic = datetime.now(utc)
         inst2 = BaseModel()
-        toc = datetime.now()
+        toc = datetime.now(utc)
         print(f"tic: {tic}, inst2.created_at: {inst2.created_at}, toc:{toc}")
         self.assertTrue(tic <= inst2.created_at <= toc)
         self.assertEqual(inst1.created_at, inst1.updated_at)
